@@ -10,7 +10,7 @@ embeddings = HuggingFaceEmbeddings(
 )
 
 db = FAISS.load_local(
-    '../faiss_clothes_index',
+    'faiss_clothes_index',
     embeddings,
     allow_dangerous_deserialization=True
     )
@@ -29,8 +29,8 @@ def get_cloth_advise(weather_desc:str, sex: str) -> str:
     else:
         return 'Не удалось найти в базе данных подходящих правил для такой погоды'
 
-if __name__ == '__main__':
-    test_query = 'На улице зима, -15 С'
+# if __name__ == '__main__':
+#     test_query = 'На улице зима, -15 градусов'
 
-    result = get_cloth_advise.invoke({'weather_desc':test_query,'sex':'Male'})
-    print(result)
+#     result = get_cloth_advise.invoke({'weather_desc':test_query,'sex':'Male'})
+#     print(result)

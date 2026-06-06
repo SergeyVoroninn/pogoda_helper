@@ -11,6 +11,7 @@ def build_vector_db():
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size = 1500,
         chunk_overlap = 150,
+        separators='\n'
     )
     chunks = text_splitter.split_text(text=text)
     print(f'Текст успешно нарезан на {len(chunks)}')
