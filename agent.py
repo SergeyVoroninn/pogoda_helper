@@ -3,13 +3,14 @@ from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from tools.weather_request import get_weather
 from tools.retrival_clothes import get_cloth_advise
+from tools.update_profile import update_profile
 from langchain.messages import HumanMessage, ToolMessage, SystemMessage
 load_dotenv()
 API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 
 
-def run_agent(query:str) -> str:
+def run_agent(query:str,user_id:int) -> str:
 
     model = ChatGoogleGenerativeAI(
         model="gemini-3.5-flash",
@@ -19,7 +20,7 @@ def run_agent(query:str) -> str:
         temperature=0.3
     )
 
-    tools = [get_weather,get_cloth_advise]
+    tools = [get_weather,get_cloth_advise,update_profile]
 
     model_with_tools = model.bind_tools(tools = tools)
 
@@ -28,7 +29,10 @@ def run_agent(query:str) -> str:
     так же важно выделить пол человека,
     твои рекомендации должны соответствовать мужской и женской одежде,
     Чтобы узнать текущую погоду воспользуйся инструментом, но он выдаёт сырые данные,
-    переведи выход в русский текст и округли градусы до целых значений перед обращением в базу данных,
+    переведи выход в русский текст и округли градусы до целых значений перед обращением в базу данных.
+    Текущий ID пользователя (user_id): {user_id}. 
+    Если пользователь предоставил информацию о своём поле или имени или городе, 
+    вызови инструмент для обновления профиля, обязательно передав этот user_id.
     Обязательно выдавай на выходе одежду для мужчин или для женщин если знаешь с кем говоришь, если нет, то для обоих полов
     """
 
@@ -65,10 +69,11 @@ def run_agent(query:str) -> str:
 
 def hello_chat() -> str:
     return """
-    Привет! Я секретная разработка для людей, непонимающих что надеть на улицу, буду помогать выбрать одежду 
-    Я умею обращатся к погодному апи, узная погодку в твоём городе и к собственной базе знаний.
-    Подскажи, как тебя зовут и где ты находишься, чтобы я мог проконсультировать тебя'
+Привет! Я секретная разработка для людей, непонимающих что надеть на улицу, буду помогать выбрать одежду 
+Я умею обращатся к погодному апи, узная погодку в твоём городе и к собственной базе знаний.
+Подскажи, как тебя зовут и где ты находишься, чтобы я мог проконсультировать тебя
     """
+
 if __name__ == '__main__':
     
     assistant_name = 'Pogoda_helper: '
