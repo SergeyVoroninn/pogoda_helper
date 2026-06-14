@@ -16,3 +16,7 @@ def update_profile(user_id: int, name: str = None, sex: str = None, city: str = 
     """
     
     upsert_user_profile(user_id,name,sex,city)
+
+    output = f'Базы данных обновлены, {user_id}, {name}, {sex}, {city}'
+    
+    return output
